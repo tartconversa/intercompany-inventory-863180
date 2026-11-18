@@ -1,0 +1,6 @@
+document_id,entity_id,side,local_no,quantity_kg,original_amount,original_currency,local_amount,date
+A1,A,sale,A-INV1,80,160,USD,1136,2026-10-10
+B1,B,purchase,B-REC9,50,100,USD,100,2026-10-11
+B2,B,purchase,B-REC10,30,60,USD,60,2026-10-11
+B3,B,sale,B-INV3,50,1400,CNY,200,2026-10-15
+C1,C,purchase,C-REC7,50,1400,CNY,1400,2026-11-01

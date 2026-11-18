@@ -1,0 +1,4 @@
+allocation_id,trade_id,source_pool,quantity_kg
+F1,T1,P0,80
+F2,T2,P1,50
+F3,T4,PM,40

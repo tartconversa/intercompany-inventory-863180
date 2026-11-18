@@ -1,0 +1,2 @@
+trade_id,seller,buyer,pool_id,quantity_kg,amount,currency,date,return_of,source_pool,received_at
+T5,B,A,P5,10,20,USD,2026-10-25,T1,P1,2026-10-29T08:00:00+08:00

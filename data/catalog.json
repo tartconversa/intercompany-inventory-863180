@@ -1,0 +1,514 @@
+{
+  "title": "跨主体药材流通的内部交易仓",
+  "synthetic": true,
+  "tables": [
+    {
+      "name": "entities",
+      "description": "单体本位币。",
+      "columns": [
+        {
+          "name": "entity_id",
+          "type": "string",
+          "description": "主体",
+          "nullable": true
+        },
+        {
+          "name": "functional_currency",
+          "type": "string",
+          "description": "本位币",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "entity_id"
+      ],
+      "references": [],
+      "path": "data/entities.csv",
+      "row_count": 3,
+      "sha256": "0fdd4f09b08b8016594c8b52b13df175c533dc4108816237efd2afc67f2063b0"
+    },
+    {
+      "name": "trades",
+      "description": "法律交易，不表示实物必移库。",
+      "columns": [
+        {
+          "name": "trade_id",
+          "type": "string",
+          "description": "交易",
+          "nullable": true
+        },
+        {
+          "name": "seller",
+          "type": "string",
+          "description": "卖方",
+          "nullable": true
+        },
+        {
+          "name": "buyer",
+          "type": "string",
+          "description": "买方",
+          "nullable": true
+        },
+        {
+          "name": "pool_id",
+          "type": "string",
+          "description": "取得或退出物池",
+          "nullable": true
+        },
+        {
+          "name": "quantity_kg",
+          "type": "number",
+          "description": "量",
+          "nullable": true
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "description": "原币金额",
+          "nullable": true
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "description": "原币",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "description": "权属日",
+          "nullable": true
+        },
+        {
+          "name": "return_of",
+          "type": "string",
+          "description": "原交易或空",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "trade_id"
+      ],
+      "references": [
+        {
+          "column": "return_of",
+          "target_table": "trades",
+          "target_column": "trade_id"
+        }
+      ],
+      "path": "data/trades.csv",
+      "row_count": 5,
+      "sha256": "126e6a5479623322b54761279f293f356c6f4069cea0369aa8e3cf911ced91f3"
+    },
+    {
+      "name": "side_documents",
+      "description": "两边实际单据，缺方不补造。",
+      "columns": [
+        {
+          "name": "document_id",
+          "type": "string",
+          "description": "单据",
+          "nullable": true
+        },
+        {
+          "name": "entity_id",
+          "type": "string",
+          "description": "主体",
+          "nullable": true
+        },
+        {
+          "name": "side",
+          "type": "string",
+          "description": "sale或purchase",
+          "nullable": true
+        },
+        {
+          "name": "local_no",
+          "type": "string",
+          "description": "本地号",
+          "nullable": true
+        },
+        {
+          "name": "quantity_kg",
+          "type": "number",
+          "description": "kg",
+          "nullable": true
+        },
+        {
+          "name": "original_amount",
+          "type": "number",
+          "description": "原币金额",
+          "nullable": true
+        },
+        {
+          "name": "original_currency",
+          "type": "string",
+          "description": "原币",
+          "nullable": true
+        },
+        {
+          "name": "local_amount",
+          "type": "number",
+          "description": "本位金额",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "description": "确认日",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "document_id"
+      ],
+      "references": [
+        {
+          "column": "entity_id",
+          "target_table": "entities",
+          "target_column": "entity_id"
+        }
+      ],
+      "path": "data/side_documents.csv",
+      "row_count": 5,
+      "sha256": "eb3e6f09b4388f42759f52b4384bea73a9dc3bfc7c43d907dbf8e25813e84d5e"
+    },
+    {
+      "name": "document_links",
+      "description": "有证据的一对多对应。",
+      "columns": [
+        {
+          "name": "link_id",
+          "type": "string",
+          "description": "关联",
+          "nullable": true
+        },
+        {
+          "name": "trade_id",
+          "type": "string",
+          "description": "交易",
+          "nullable": true
+        },
+        {
+          "name": "document_id",
+          "type": "string",
+          "description": "本地单据",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "link_id"
+      ],
+      "references": [
+        {
+          "column": "trade_id",
+          "target_table": "trades",
+          "target_column": "trade_id"
+        },
+        {
+          "column": "document_id",
+          "target_table": "side_documents",
+          "target_column": "document_id"
+        }
+      ],
+      "path": "data/document_links.csv",
+      "row_count": 5,
+      "sha256": "bab83f5992e709231002cd118fb5c9375998beae9953717bcbd47cf451a2fa8f"
+    },
+    {
+      "name": "flow_allocations",
+      "description": "明确内部取得从哪一来源退出。",
+      "columns": [
+        {
+          "name": "allocation_id",
+          "type": "string",
+          "description": "行",
+          "nullable": true
+        },
+        {
+          "name": "trade_id",
+          "type": "string",
+          "description": "交易",
+          "nullable": true
+        },
+        {
+          "name": "source_pool",
+          "type": "string",
+          "description": "前池",
+          "nullable": true
+        },
+        {
+          "name": "quantity_kg",
+          "type": "number",
+          "description": "kg",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "allocation_id"
+      ],
+      "references": [
+        {
+          "column": "trade_id",
+          "target_table": "trades",
+          "target_column": "trade_id"
+        }
+      ],
+      "path": "data/flow_allocations.csv",
+      "row_count": 3,
+      "sha256": "5d1ddee6889b1fe714093d0e07feda3c31ffb8d919bfce05eb19ecae417203f3"
+    },
+    {
+      "name": "mixes",
+      "description": "重新包装后的混池。",
+      "columns": [
+        {
+          "name": "mix_id",
+          "type": "string",
+          "description": "混合",
+          "nullable": true
+        },
+        {
+          "name": "output_pool",
+          "type": "string",
+          "description": "新池",
+          "nullable": true
+        },
+        {
+          "name": "entity_id",
+          "type": "string",
+          "description": "所有方",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "description": "日",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "mix_id"
+      ],
+      "references": [
+        {
+          "column": "entity_id",
+          "target_table": "entities",
+          "target_column": "entity_id"
+        }
+      ],
+      "path": "data/mixes.csv",
+      "row_count": 1,
+      "sha256": "bef7ee7dd5fb7399dede53e10cc0071e99607ac27518a8e41536325bd7ee55a1"
+    },
+    {
+      "name": "mix_inputs",
+      "description": "混合不创造交易。",
+      "columns": [
+        {
+          "name": "input_id",
+          "type": "string",
+          "description": "行",
+          "nullable": true
+        },
+        {
+          "name": "mix_id",
+          "type": "string",
+          "description": "混合",
+          "nullable": true
+        },
+        {
+          "name": "source_pool",
+          "type": "string",
+          "description": "源池",
+          "nullable": true
+        },
+        {
+          "name": "quantity_kg",
+          "type": "number",
+          "description": "kg",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "input_id"
+      ],
+      "references": [
+        {
+          "column": "mix_id",
+          "target_table": "mixes",
+          "target_column": "mix_id"
+        }
+      ],
+      "path": "data/mix_inputs.csv",
+      "row_count": 2,
+      "sha256": "64b9b7c7122683161e4e80f6c7595dc0e7ed64927196bc01c66d26dab596525f"
+    },
+    {
+      "name": "physical_moves",
+      "description": "库位变动独立证据。",
+      "columns": [
+        {
+          "name": "move_id",
+          "type": "string",
+          "description": "移库",
+          "nullable": true
+        },
+        {
+          "name": "pool_id",
+          "type": "string",
+          "description": "池",
+          "nullable": true
+        },
+        {
+          "name": "from_location",
+          "type": "string",
+          "description": "起",
+          "nullable": true
+        },
+        {
+          "name": "to_location",
+          "type": "string",
+          "description": "止",
+          "nullable": true
+        },
+        {
+          "name": "quantity_kg",
+          "type": "number",
+          "description": "kg",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "description": "日",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "move_id"
+      ],
+      "references": [],
+      "path": "data/physical_moves.csv",
+      "row_count": 2,
+      "sha256": "1e47a52d6d8554d328753c79b1425e05337829391d3b7977003729dfbcf3b8a3"
+    },
+    {
+      "name": "later_returns",
+      "description": "后续独立接收的旧期退货。",
+      "columns": [
+        {
+          "name": "trade_id",
+          "type": "string",
+          "description": "交易",
+          "nullable": true
+        },
+        {
+          "name": "seller",
+          "type": "string",
+          "description": "卖方",
+          "nullable": true
+        },
+        {
+          "name": "buyer",
+          "type": "string",
+          "description": "买方",
+          "nullable": true
+        },
+        {
+          "name": "pool_id",
+          "type": "string",
+          "description": "返回新池",
+          "nullable": true
+        },
+        {
+          "name": "quantity_kg",
+          "type": "number",
+          "description": "kg",
+          "nullable": true
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "description": "原币金额",
+          "nullable": true
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "description": "原币",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "description": "权属日",
+          "nullable": true
+        },
+        {
+          "name": "return_of",
+          "type": "string",
+          "description": "原交易",
+          "nullable": true
+        },
+        {
+          "name": "source_pool",
+          "type": "string",
+          "description": "退自池",
+          "nullable": true
+        },
+        {
+          "name": "received_at",
+          "type": "datetime",
+          "description": "补报收到",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "trade_id"
+      ],
+      "references": [
+        {
+          "column": "return_of",
+          "target_table": "trades",
+          "target_column": "trade_id"
+        }
+      ],
+      "path": "data/later_returns.csv",
+      "row_count": 1,
+      "sha256": "5ac389a077e0744d9c86d3d6568feeff05447e156c5459ff232edd937c166651"
+    },
+    {
+      "name": "fx",
+      "description": "内部集团列报汇率，CNY为1；缺日待核。",
+      "columns": [
+        {
+          "name": "currency",
+          "type": "string",
+          "description": "币种",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "description": "日",
+          "nullable": true
+        },
+        {
+          "name": "cny_per_unit",
+          "type": "number",
+          "description": "人民币每单位",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "currency",
+        "date"
+      ],
+      "references": [],
+      "path": "data/fx.csv",
+      "row_count": 8,
+      "sha256": "0d5498440005bd0bf94879e9bb844edc113cd5ddd2f9d52ee42d5689759d87e6"
+    }
+  ]
+}

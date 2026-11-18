@@ -1,0 +1,6 @@
+trade_id,seller,buyer,pool_id,quantity_kg,amount,currency,date,return_of
+T0,EXT,A,P0,100,1000,CNY,2026-10-01,
+T1,A,B,P1,80,160,USD,2026-10-10,
+T2,B,C,P2,50,1400,CNY,2026-10-15,
+T3,EXT,C,P3,50,800,CNY,2026-10-15,
+T4,C,EXT,PM,40,1500,CNY,2026-10-20,
